@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داشبورد جامع پروژه اصلاح زیرساخت IT</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap');
+        
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main-nav {
+            background-color: #ffffff;
+            padding: 0.75rem 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            height: 60px;
+        }
+        
+        .hamburger-btn {
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .hamburger-btn svg {
+            width: 24px;
+            height: 24px;
+            color: #374151;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #1f2937;
+        }
+
+        header p {
+            font-size: 1.125rem;
+            color: #4b5563;
+            margin-top: 0.5rem;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .summary-card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .summary-card.total {
+           background-color: #1f2937;
+           color: #ffffff;
+        }
+        .summary-card.total h3{
+            color: #d1d5db;
+        }
+         .summary-card.total .value {
+            color: #ffffff;
+        }
+         .summary-card.total .unit {
+            color: #9ca3af;
+        }
+
+
+        .summary-card-header h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #4b5563;
+            margin: 0;
+        }
+
+        .summary-card .value {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: #1f2937;
+            margin-top: 0.5rem;
+            text-align: right;
+        }
+        
+        .summary-card .value .unit {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: #6b7280;
+        }
+
+        .phase-section {
+            margin-bottom: 2rem;
+            padding-top: 5rem;
+            margin-top: -5rem;
+        }
+
+        .phase-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+            border-right: 4px solid #3b82f6;
+            padding-right: 1rem;
+        }
+
+        .task-card {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+            margin-bottom: 1rem;
+            padding: 1.5rem;
+            transition: box-shadow 0.3s;
+        }
+        .task-card:hover {
+             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .task-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .task-title-section {
+             display: flex;
+            align-items: center;
+        }
+        
+        .task-title h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0;
+        }
+        
+        .task-title p {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #3b82f6;
+            margin: 0;
+        }
+        
+        .task-meta {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .task-meta-item {
+            text-align: left;
+            margin-left: 2rem;
+        }
+        
+        .task-meta-item:last-child {
+            margin-left: 0;
+        }
+
+        .task-meta-item .label {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        
+        .task-meta-item .value {
+            font-weight: 700;
+            color: #374151;
+        }
+        
+        .details-btn {
+            background-color: #eef2ff;
+            color: #4338ca;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-right: 2rem;
+        }
+
+        .details-btn:hover {
+            background-color: #e0e7ff;
+        }
+
+        .task-details {
+            display: none; /* Details are now collapsible */
+            border-top: 1px solid #e5e7eb;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+        }
+        
+        .task-objective {
+            margin-bottom: 1.5rem;
+        }
+        
+        .task-objective h4 {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+        
+        .task-objective p {
+            color: #4b5563;
+            font-size: 0.9rem;
+            padding-right: 1rem;
+            line-height: 1.7;
+        }
+        
+        .costs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .cost-card {
+            background-color: #f9fafb;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .cost-card h5 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+        
+        .cost-card ul {
+            padding-right: 1.25rem;
+            margin: 0;
+            font-size: 0.875rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        
+        .cost-card .total-cost {
+            text-align: right;
+            margin-top: 1rem;
+            font-weight: 700;
+            color: #1d4ed8;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        
+        @media (max-width: 768px) {
+            .costs-grid {
+                grid-template-columns: 1fr;
+            }
+            .task-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+             .task-title-section {
+                margin-bottom: 1rem;
+                width: 100%;
+                justify-content: space-between;
+            }
+            .task-meta {
+                 width: 100%;
+                 justify-content: space-between;
+            }
+            .task-meta-item {
+                margin-left: 0;
+                text-align: right;
+            }
+            .details-btn {
+                margin-right: 0;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="app-root">
+        </div>
+
+    <script>
+        // Data updated based on the provided DOCX file
+        const projectData = [
+            // Phase 1: پایدارسازی و ایمن‌سازی
+            { id: '۱.۱', phase: 'فاز اول: پایدارسازی و ایمن‌سازی', title: 'برقراری ارتباط پایدار لایه ۲ بین کارخانه و برج', objective: 'رفع وابستگی به اینترنت عمومی، حذف کندی و قطعی‌های مکرر در سامانه‌های اصلی و ایجاد یک ارتباط اختصاصی، امن و پایدار بین دو سایت اصلی شرکت.', costs: { equipment: 90000000, contractor: 25000000, total: 115000000 }, equipmentDetails: '• دو عدد آنتن رادیویی Point-to-Point (برند Mikrotik/Ubiquiti)\n• دکل مهاری و متعلقات نصب\n• کابل شبکه Outdoor و محافظ برق (Surge Protector)', contractorDetails: '• بازدید فنی دقیق (Site Survey) و امکان‌سنجی\n• نصب دکل، آنتن‌ها و اجرای کابل‌کشی\n• پیکربندی، تنظیم دقیق لینک و تست پایداری' },
+            { id: '۱.۲', phase: 'فاز اول: پایدارسازی و ایمن‌سازی', title: 'خرید و پیاده‌سازی فایروال (NGFW) و پشتیبانی', objective: 'ایمن‌سازی کامل شبکه در برابر حملات اینترنتی و باج‌افزارها، مدیریت پهنای باند، کنترل دسترسی کاربران و فراهم‌سازی بستر دورکاری امن (VPN).', costs: { equipment: 200000000, contractor: 30000000, total: 230000000 }, equipmentDetails: '• یک دستگاه فایروال NGFW (مانند FortiGate) متناسب با تعداد کاربران\n• لایسنس جامع امنیتی (UTM Bundle) یک‌ساله\n• قرارداد پشتیبانی و گارانتی ۱ ساله فایروال (۲۰ میلیون تومان)', contractorDetails: '• نصب و پیکربندی اولیه دستگاه\n• تعریف پالیسی‌های امنیتی، کنترل وب، مدیریت پهنای باند و راه‌اندازی VPN\n• آموزش و تحویل' },
+            { id: '۱.۳', phase: 'فاز اول: پایدارسازی و ایمن‌سازی', title: 'راه‌اندازی سرور مرکزی (AD) و آماده‌سازی اتاق سرور', objective: 'ایجاد مدیریت متمرکز بر کاربران و کامپیوترها، اعمال سیاست‌های امنیتی یکپارچه، و کنترل کامل بر دسترسی‌ها در سطح شبکه.', costs: { equipment: 385000000, contractor: 90000000, total: 475000000 }, equipmentDetails: '• یک دستگاه سرور فیزیکی Rackmount (برند HP/Dell)\n• حافظه RAM و فضای ذخیره‌سازی (SSD+HDD)\n• لایسنس Windows Server Standard و User CALs\n• قرارداد پشتیبانی و گارانتی ۱ ساله سرور (۳۵ میلیون تومان)', contractorDetails: '• آماده‌سازی اتاق سرور شامل برق و تهویه (۵۰ میلیون تومان)\n• نصب فیزیکی سرور و انجام تنظیمات RAID\n• نصب مجازی‌ساز و پیکربندی کامل Active Directory\n• اتصال کلاینت‌ها به دامین' },
+            { id: '۱.۴', phase: 'فاز اول: پایدارسازی و ایمن‌سازی', title: 'خرید و نصب UPS مناسب برای برج و کارخانه', objective: 'محافظت از کلیه تجهیزات حیاتی شبکه و سرورها در برابر نوسانات و قطعی برق و جلوگیری از آسیب فیزیکی و از دست رفتن داده‌ها.', costs: { equipment: 250000000, contractor: 15000000, total: 265000000 }, equipmentDetails: '• دو دستگاه UPS با توان مناسب (مثلاً 3KVA) برای دو سایت\n• کابینت باتری اضافی (در صورت نیاز)', contractorDetails: '• حمل و نصب دستگاه‌ها در اتاق سرور\n• انجام سربندی باتری‌ها و اتصال به تجهیزات' },
+            { id: '۱.۵', phase: 'فاز اول: پایدارسازی و ایمن‌سازی', title: 'پیاده‌سازی آنتی‌ویروس تحت شبکه (Endpoint Security)', objective: 'ایجاد حفاظت یکپارچه و متمرکز در برابر بدافزارها، ویروس‌ها و تهدیدات امنیتی بر روی تمامی کامپیوترهای سازمان.', costs: { equipment: 70000000, contractor: 10000000, total: 80000000 }, equipmentDetails: '• لایسنس نرم‌افزار Endpoint Security (مانند ESET) به تعداد کاربران', contractorDetails: '• نصب و پیکربندی کنسول مدیریت مرکزی\n• تدوین پالیسی‌ها و ارائه آموزش‌های لازم' },
+            { id: '۱.۶', phase: 'فاز اول: پایدارسازی و ایمن‌سازی', title: 'مدیریت و نظارت بر پروژه (داخلی)', objective: 'تخصیص منابع داخلی جهت نظارت دقیق بر حسن اجرای پروژه، هماهنگی با پیمانکاران و تضمین کیفیت تحویل.', costs: { equipment: 0, contractor: 20000000, total: 20000000 }, equipmentDetails: '-', contractorDetails: '• نظارت بر اجرای فنی پروژه‌ها\n• مدیریت زمان‌بندی و کنترل هزینه‌ها' },
+            
+            // Phase 2: بهینه‌سازی و نوسازی
+            { id: '۲.۱', phase: 'فاز دوم: بهینه‌سازی و نوسازی', title: 'نوسازی کابل‌کشی و جمع‌آوری تجهیزات قدیمی', objective: 'رفع کامل مشکل کندی شبکه داخلی با تعویض کابل‌کشی‌های فرسوده و استانداردسازی زیرساخت پسیو جهت افزایش بهره‌وری.', costs: { equipment: 120000000, contractor: 90000000, total: 210000000 }, equipmentDetails: '• کابل شبکه Cat6، پچ پنل، کیستون و فیس پلیت\n• داکت و ترانک جهت نظم‌دهی به کابل‌ها', contractorDetails: '• تخریب و جمع‌آوری تجهیزات پسیو قدیمی (۱۰ میلیون تومان)\n• اجرای کامل کابل‌کشی و داکت‌کشی استاندارد\n• نصب کلیه تجهیزات پسیو و آرایش رک\n• تست نهایی تمامی نودها با تستر شبکه' },
+            { id: '۲.۲', phase: 'فاز دوم: بهینه‌سازی و نوسازی', title: 'جایگزینی سوئیچ‌ها با مدل مدیریتی و پشتیبانی', objective: 'افزایش امنیت و پایداری شبکه داخلی از طریق جایگزینی تجهیزات قدیمی با سوئیچ‌های هوشمند و قابل مدیریت.', costs: { equipment: 310000000, contractor: 20000000, total: 330000000 }, equipmentDetails: '• سوئیچ مدیریتی ۴۸ پورت (Core Switch)\n• سوئیچ‌های مدیریتی ۲۴ پورت PoE (Access Switches)\n• قرارداد پشتیبانی و گارانتی ۱ ساله سوئیچ‌ها (۳۰ میلیون تومان)', contractorDetails: '• جایگزینی و نصب سوئیچ‌های جدید\n• پیکربندی VLANها، لینک‌های ارتباطی و تنظیمات امنیتی' },
+            { id: '۲.۳', phase: 'فاز دوم: بهینه‌سازی و نوسازی', title: 'بهبود و یکپارچه‌سازی پوشش Wi-Fi', objective: 'فراهم کردن پوشش کامل، پایدار و پرسرعت شبکه بی‌سیم در تمامی نقاط دفتر مرکزی و کارخانه برای افزایش پویایی و همکاری تیمی.', costs: { equipment: 150000000, contractor: 25000000, total: 175000000 }, equipmentDetails: '• اکسس پوینت‌های Enterprise (مانند Ubiquiti UniFi)\n• کنترلر سخت‌افزاری یا نرم‌افزاری (Cloud Key)', contractorDetails: '• بازدید فنی و تهیه نقشه حرارتی (Heatmap)\n• نصب اکسس پوینت‌ها در نقاط بهینه و پیکربندی متمرکز' },
+            { id: '۲.۴', phase: 'فاز دوم: بهینه‌سازی و نوسازی', title: 'راه‌اندازی سرور بکاپ و اجرای مانور بازیابی', objective: 'حفاظت از داده‌های حیاتی سازمان در برابر هرگونه حادثه با استقرار یک راهکار پشتیبان‌گیری مدرن و قابل اتکا در سایت مشهد.', costs: { equipment: 100000000, contractor: 25000000, total: 125000000 }, equipmentDetails: '• دستگاه ذخیره‌ساز تحت شبکه (NAS) با ظرفیت مناسب\n• لایسنس نرم‌افزار پشتیبان‌گیری حرفه‌ای (مانند Veeam)', contractorDetails: '• نصب و پیکربندی دستگاه NAS\n• تعریف و تنظیم جاب‌های پشتیبان‌گیری\n• اجرای مانور بازیابی اطلاعات (Test Restore) جهت اطمینان از صحت عملکرد (۱۰ میلیون تومان)' },
+            { id: '۲.۵', phase: 'فاز دوم: بهینه‌سازی و نوسازی', title: 'راه‌اندازی سرور محلی VoIP و آموزش تیم', objective: 'ارتقاء کیفیت و پایداری تماس‌های تلفنی با انتقال مرکز تلفن به داخل سازمان و حذف وابستگی به سرویس‌دهنده‌های خارجی.', costs: { equipment: 60000000, contractor: 35000000, total: 95000000 }, equipmentDetails: '• یک دستگاه سرور کوچک یا Mini-PC برای میزبانی\n• لایسنس نرم‌افزار مرکز تلفن (مانند Issabel/3CX)', contractorDetails: '• نصب و پیکربندی کامل نرم‌افزار مرکز تلفن\n• آموزش تخصصی مدیریت سیستم VoIP برای تیم IT (۱۵ میلیون تومان)\n• انتقال و تعریف داخلی‌ها و خطوط شهری' },
+            { id: '۲.۶', phase: 'فاز دوم: بهینه‌سازی و نوسازی', title: 'مدیریت و نظارت بر پروژه (داخلی)', objective: 'تخصیص منابع داخلی جهت نظارت دقیق بر حسن اجرای پروژه، هماهنگی با پیمانکاران و تضمین کیفیت تحویل.', costs: { equipment: 0, contractor: 15000000, total: 15000000 }, equipmentDetails: '-', contractorDetails: '• نظارت بر اجرای فنی پروژه‌ها\n• مدیریت زمان‌بندی و کنترل هزینه‌ها' },
+
+            // Phase 3: سرویس‌ها، رویه‌ها و حاکمیت
+            { id: '۳.۱', phase: 'فاز سوم: سرویس‌ها، رویه‌ها و حاکمیت IT', title: 'تدوین رویه‌های استاندارد IT', objective: 'ایجاد شفافیت، نظم و انضباط در فرآیندهای کلیدی IT نظیر خرید، تحویل تجهیزات، انبارداری و به‌روزرسانی سیستم‌های پرسنل.', costs: { equipment: 0, contractor: 0, total: 0 }, equipmentDetails: '-', contractorDetails: '• تدوین دستورالعمل خرید و تامین تجهیزات\n• تدوین رویه به‌روزرسانی سیستم پرسنل\n• تدوین رویه پرداخت‌های IT\n• ایجاد انبار مرکزی IT' },
+            { id: '۳.۲', phase: 'فاز سوم: سرویس‌ها، رویه‌ها و حاکمیت IT', title: 'پیاده‌سازی سرویس‌های مدیریتی و نظارتی', objective: 'افزایش امنیت و حرکت به سمت مدیریت پیشگیرانه (Proactive) با نظارت فعال بر سرویس‌ها و مدیریت متمرکز دسترسی‌های حساس.', costs: { equipment: 50000000, contractor: 15000000, total: 65000000 }, equipmentDetails: '• لایسنس نرم‌افزار مدیریت پسورد (PAM)\n• لایسنس یا اشتراک سرویس مانیتورینگ (Uptime Monitoring)', contractorDetails: '• نصب و پیکربندی ابزارهای مربوطه\n• آموزش به تیم IT' },
+            { id: '۳.۳', phase: 'فاز سوم: سرویس‌ها، رویه‌ها و حاکمیت IT', title: 'بودجه پایلوت و رویه استفاده از پلتفرم‌های نوین', objective: 'توانمندسازی سازمان برای استفاده از فناوری‌های جدید از طریق تدوین سیاست‌های مشخص و تخصیص بودجه اولیه برای تست و ارزیابی.', costs: { equipment: 35000000, contractor: 50000000, total: 40000000 }, equipmentDetails: '• بودجه اولیه اشتراک پلتفرم‌های نوین (AI, LMS) جهت اجرای پایلوت', contractorDetails: '• تدوین سیاست‌نامه استفاده از هوش مصنوعی\n• بررسی، انتخاب و پیاده‌سازی اولیه پلتفرم آموزشی مناسب' }
+        ];
+        
+        // Final costs from the DOCX summary table
+        const finalCosts = {
+            phase1: 1244250000,
+            phase2: 997500000,
+            phase3: 110250000,
+            total: 2352000000
+        };
+
+        const toPersianDigits = (str) => {
+            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            return String(str).replace(/\d/g, d => persianDigits[d]);
+        };
+
+        const formatNumber = (num) => {
+            if (num === 0) return '۰';
+            const formatted = new Intl.NumberFormat('en-US').format(num);
+            return toPersianDigits(formatted);
+        };
+        
+        const createCostList = (details) => {
+            if (!details || details === '-') return '<li>-</li>';
+            return details.split('\n').map(item => `<li>${item.replace('• ', '')}</li>`).join('');
+        };
+
+        const generateReport = () => {
+            const appRoot = document.getElementById('app-root');
+            
+            const totalTasks = projectData.length;
+
+            const groupedTasks = projectData.reduce((acc, task) => {
+                (acc[task.phase] = acc[task.phase] || []).push(task);
+                return acc;
+            }, {});
+
+            // Main Navigation
+            let navHtml = '<nav class="main-nav">';
+            navHtml += `<button class="hamburger-btn" id="hamburger-btn" aria-label="فهرست فازها">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
+                        </button>`;
+            navHtml += '</nav>';
+
+            // Main Content
+            let mainHtml = `
+                <div class="container">
+                <header>
+                    <h1>داشبورد جامع پروژه اصلاح زیرساخت IT</h1>
+                    <p>نمای کلی از فازها، فعالیت‌ها، هزینه‌ها و ریسک‌های پروژه بر اساس "طرح جامع اصلاح و توسعه"</p>
+                </header>
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <div class="summary-card-header"><h3>هزینه کل فاز اول (نهایی)</h3></div>
+                        <p class="value">${formatNumber(finalCosts.phase1)} <span class="unit">تومان</span></p>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-card-header"><h3>هزینه کل فاز دوم (نهایی)</h3></div>
+                        <p class="value">${formatNumber(finalCosts.phase2)} <span class="unit">تومان</span></p>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-card-header"><h3>هزینه کل فاز سوم (نهایی)</h3></div>
+                        <p class="value">${formatNumber(finalCosts.phase3)} <span class="unit">تومان</span></p>
+                    </div>
+                    <div class="summary-card total">
+                        <div class="summary-card-header"><h3>جمع کل سرمایه‌گذاری</h3></div>
+                        <p class="value">${formatNumber(finalCosts.total)} <span class="unit">تومان</span></p>
+                    </div>
+                </div>
+                <main>`;
+            
+            let phaseCounter = 1;
+            for (const phase in groupedTasks) {
+                mainHtml += `
+                    <div id="phase-${phaseCounter}" class="phase-section">
+                        <h2 class="phase-title">${phase}</h2>`;
+                
+                groupedTasks[phase].forEach(task => {
+                    mainHtml += `
+                        <div class="task-card" id="task-${task.id.replace(/\./g, '-')}">
+                            <div class="task-header" style="cursor: pointer;">
+                                <div class="task-title-section">
+                                    <div class="task-title">
+                                        <p>WBS ${toPersianDigits(task.id)}</p>
+                                        <h3>${task.title}</h3>
+                                    </div>
+                                </div>
+                                <div class="task-meta">
+                                    <div class="task-meta-item">
+                                        <span class="label">هزینه کل: </span>
+                                        <span class="value">${task.costs.total > 0 ? formatNumber(task.costs.total) + ' تومان' : 'بدون هزینه مستقیم'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="task-details">
+                                <div class="task-objective">
+                                    <h4>هدف از این فعالیت:</h4>
+                                    <p>${task.objective}</p>
+                                </div>
+                                <div class="costs-grid">
+                                    <div class="cost-card">
+                                        <h5>جزئیات هزینه تجهیزات/نرم‌افزار</h5>
+                                        <ul>${createCostList(task.equipmentDetails)}</ul>
+                                        <p class="total-cost">${formatNumber(task.costs.equipment)} تومان</p>
+                                    </div>
+                                    <div class="cost-card">
+                                        <h5>جزئیات هزینه پیمانکار/اجرا</h5>
+                                        <ul>${createCostList(task.contractorDetails)}</ul>
+                                        <p class="total-cost">${formatNumber(task.costs.contractor)} تومان</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+                });
+
+                mainHtml += `</div>`;
+                phaseCounter++;
+            }
+
+            mainHtml += `
+                </main>
+                <footer>
+                    <p>طرح جامع پروژه و ساختار شکست کار (WBS) - اصلاح و توسعه زیرساخت IT فراپخت</p>
+                    <p>تهیه کننده: هادی علایی، مدیر فناوری اطلاعات</p>
+                </footer>
+                </div>`;
+            
+            appRoot.innerHTML = navHtml + mainHtml;
+
+            // --- Event Listeners ---
+            
+            // Hamburger Menu
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+            let menuDiv = document.getElementById('hamburger-menu');
+            if (menuDiv) menuDiv.remove();
+
+            menuDiv = document.createElement('div');
+            menuDiv.id = 'hamburger-menu';
+            menuDiv.style.position = 'fixed';
+            menuDiv.style.top = '70px';
+            menuDiv.style.right = '1rem';
+            menuDiv.style.background = '#fff';
+            menuDiv.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+            menuDiv.style.zIndex = '2001';
+            menuDiv.style.minWidth = '250px';
+            menuDiv.style.padding = '1rem';
+            menuDiv.style.display = 'none';
+            menuDiv.style.borderRadius = '0.75rem';
+            menuDiv.style.border = '1px solid #e5e7eb';
+
+            let menuHtml = '<ul style="list-style:none;margin:0;padding:0">';
+            let phaseIndex = 1;
+            for (const phase in groupedTasks) {
+                menuHtml += `<li style="margin-bottom:0.5rem;"><a href="#phase-${phaseIndex}" style="text-decoration:none;color:#1f2937;font-weight:600;display:block;padding:0.75rem 1rem;border-radius:0.5rem;transition: all 0.2s ease-in-out;" onmouseover="this.style.background='#f3f4f6'; this.style.color='#1d4ed8';" onmouseout="this.style.background='none'; this.style.color='#1f2937';">${phase}</a></li>`;
+                if(phaseIndex < Object.keys(groupedTasks).length) {
+                    menuHtml += '<hr style="border:none; border-top: 1px solid #f3f4f6; margin: 0.5rem 0;" />';
+                }
+                phaseIndex++;
+            }
+            menuHtml += '</ul>';
+            menuDiv.innerHTML = menuHtml;
+            document.body.appendChild(menuDiv);
+
+            hamburgerBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                menuDiv.style.display = menuDiv.style.display === 'block' ? 'none' : 'block';
+            });
+
+            // Close menu on outside click or link click
+            document.addEventListener('click', function(e) {
+                const isLink = e.target.tagName === 'A' && menuDiv.contains(e.target);
+                if (menuDiv.style.display === 'block' && (!menuDiv.contains(e.target) && e.target !== hamburgerBtn || isLink)) {
+                    menuDiv.style.display = 'none';
+                }
+            });
+            
+            // Collapsible Task Cards
+             appRoot.addEventListener('click', function(event) {
+                const header = event.target.closest('.task-header');
+                if (header) {
+                    const details = header.nextElementSibling;
+                    if (details && details.classList.contains('task-details')) {
+                         details.style.display = details.style.display === 'block' ? 'none' : 'block';
+                    }
+                }
+            });
+        };
+
+        document.addEventListener('DOMContentLoaded', generateReport);
+    </script>
+</body>
+</html>
