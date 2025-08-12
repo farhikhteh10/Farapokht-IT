@@ -1,0 +1,327 @@
+/* ---
+Modern UI/UX Redesign
+Inspired by Google Material Design
+--- */
+
+/* 1. Root Variables & Global Styles
+-------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+    --font-family-base: 'Vazirmatn', sans-serif;
+    --background-color: #f5f7fa; /* Lighter, cleaner background */
+    --surface-color: #ffffff;
+    --on-surface-color: #202124; /* Main text color */
+    --on-surface-variant-color: #5f6368; /* Secondary text color */
+    --primary-color: #1a73e8; /* Google Blue */
+    --primary-color-dark: #174ea6;
+    --primary-color-light: #e8f0fe;
+    --dark-surface-color: #202124;
+    --on-dark-surface-color: #e8eaed;
+
+    --shadow-sm: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+    --shadow-md: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
+    --border-radius-md: 0.875rem; /* 14px */
+    --border-radius-sm: 0.5rem; /* 8px */
+    --transition-speed: 250ms;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-family-base);
+    background-color: var(--background-color);
+    color: var(--on-surface-color);
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* 2. Layout & Navigation
+-------------------------------------------------- */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+.main-nav {
+    background-color: var(--surface-color);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    height: 64px;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.03), 0 1px 6px -1px rgba(0,0,0,0.02), 0 2px 4px 0 rgba(0,0,0,0.03);
+    border-bottom: 1px solid #ddd;
+}
+
+.hamburger-btn {
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color var(--transition-speed) ease;
+}
+.hamburger-btn:hover {
+    background-color: rgba(0,0,0,0.05);
+}
+
+.hamburger-btn svg {
+    width: 24px;
+    height: 24px;
+    color: var(--on-surface-variant-color);
+}
+
+
+/* 3. Header & Typography
+-------------------------------------------------- */
+header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+header h1 {
+    font-size: 2.75rem;
+    font-weight: 800;
+    color: var(--on-surface-color);
+    line-height: 1.2;
+}
+
+header p {
+    font-size: 1.125rem;
+    color: var(--on-surface-variant-color);
+    margin-top: 0.75rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 4. Summary Cards
+-------------------------------------------------- */
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+}
+
+.summary-card {
+    background-color: var(--surface-color);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid transparent;
+    transition: box-shadow var(--transition-speed) ease, transform var(--transition-speed) ease;
+}
+.summary-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.summary-card.total {
+   background-color: var(--dark-surface-color);
+   color: var(--on-dark-surface-color);
+}
+.summary-card.total h3 {
+    color: #9aa0a6; /* Lighter grey for titles on dark bg */
+}
+.summary-card.total .value {
+    color: var(--on-dark-surface-color);
+}
+.summary-card.total .unit {
+    color: #9aa0a6;
+}
+
+.summary-card-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--on-surface-variant-color);
+    margin: 0 0 1rem 0;
+}
+
+.summary-card .value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--on-surface-color);
+    text-align: right;
+    line-height: 1;
+}
+
+.summary-card .value .unit {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--on-surface-variant-color);
+    margin-right: 0.25rem;
+}
+
+
+/* 5. Phase & Task Styling
+-------------------------------------------------- */
+.phase-section {
+    margin-bottom: 3rem;
+    padding-top: 5rem; /* For anchor links */
+    margin-top: -5rem; /* For anchor links */
+}
+
+.phase-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--on-surface-color);
+    margin-bottom: 2rem;
+    border-right: 5px solid var(--primary-color);
+    padding-right: 1.25rem;
+}
+
+.task-card {
+    background-color: var(--surface-color);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    transition: box-shadow var(--transition-speed) ease;
+    overflow: hidden;
+}
+.task-card:hover {
+     box-shadow: var(--shadow-md);
+}
+
+.task-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.task-title h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--on-surface-color);
+    margin: 0;
+}
+
+.task-title p {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0;
+    margin-bottom: 0.25rem;
+}
+
+.task-meta-item .label {
+    font-size: 0.875rem;
+    color: var(--on-surface-variant-color);
+}
+
+.task-meta-item .value {
+    font-weight: 600;
+    color: var(--on-surface-color);
+}
+
+.task-details {
+    display: none;
+    border-top: 1px solid #e0e0e0;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+}
+
+.task-objective h4 {
+    font-weight: 600;
+    color: var(--on-surface-color);
+    margin-bottom: 0.75rem;
+}
+
+.task-objective p {
+    color: var(--on-surface-variant-color);
+    font-size: 0.95rem;
+    padding-right: 0;
+    line-height: 1.8;
+}
+
+.costs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.cost-card {
+    background-color: var(--background-color);
+    padding: 1.25rem;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid #e0e0e0;
+}
+
+.cost-card h5 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--on-surface-color);
+}
+
+.cost-card ul {
+    padding-right: 1rem;
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--on-surface-variant-color);
+    line-height: 1.7;
+}
+
+.cost-card .total-cost {
+    text-align: right;
+    margin-top: 1rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--primary-color-dark);
+}
+
+
+/* 6. Footer
+-------------------------------------------------- */
+footer {
+    text-align: center;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid #ddd;
+    color: #9aa0a6;
+    font-size: 0.875rem;
+}
+
+
+/* 7. Responsive Design
+-------------------------------------------------- */
+@media (max-width: 992px) {
+    header h1 {
+        font-size: 2.25rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .costs-grid {
+        grid-template-columns: 1fr;
+    }
+    .task-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    .task-meta {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .task-meta-item {
+        margin-left: 0;
+        text-align: right;
+    }
+}
