@@ -9,29 +9,16 @@ const formatNumber = (num) => {
     return toPersianDigits(formatted);
 };
 
-const createCostList = (details) => {
-    if (!details || details === '-') return '<li>-</li>';
-    return details.split('\n').map(item => `<li>${item.replace('• ', '')}</li>`).join('');
-};
-
 const generateReport = () => {
     const appRoot = document.getElementById('app-root');
 
-    const totalTasks = projectData.length;
+    // --- RENDER STATIC HTML ---
+    let navHtml = `<nav class="main-nav">
+                    <button class="hamburger-btn" id="hamburger-btn" aria-label="فهرست فازها">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
+                    </button>
+                   </nav>`;
 
-    const groupedTasks = projectData.reduce((acc, task) => {
-        (acc[task.phase] = acc[task.phase] || []).push(task);
-        return acc;
-    }, {});
-
-    // Main Navigation
-    let navHtml = '<nav class="main-nav">';
-    navHtml += `<button class="hamburger-btn" id="hamburger-btn" aria-label="فهرست فازها">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
-                </button>`;
-    navHtml += '</nav>';
-
-    // Main Content
     let mainHtml = `
         <div class="container">
         <header>
@@ -58,16 +45,18 @@ const generateReport = () => {
         </div>
         <main>`;
 
-    let phaseCounter = 1;
-    for (const phase in groupedTasks) {
+    // --- RENDER DYNAMIC CONTENT ---
+    projectData.forEach((phase, index) => {
+        const phaseCounter = index + 1;
         mainHtml += `
             <div id="phase-${phaseCounter}" class="phase-section">
-                <h2 class="phase-title">${phase}</h2>`;
+                <h2 class="phase-title">${phase.phase_title}</h2>
+                <p class="phase-introduction">${phase.phase_introduction}</p>`;
 
-        groupedTasks[phase].forEach(task => {
+        phase.tasks.forEach(task => {
             mainHtml += `
                 <div class="task-card" id="task-${task.id.replace(/\./g, '-')}">
-                    <div class="task-header" style="cursor: pointer;">
+                    <div class="task-header">
                         <div class="task-title-section">
                             <div class="task-title">
                                 <p>WBS ${toPersianDigits(task.id)}</p>
@@ -79,35 +68,15 @@ const generateReport = () => {
                                 <span class="label">هزینه کل: </span>
                                 <span class="value">${task.costs.total > 0 ? formatNumber(task.costs.total) + ' تومان' : 'بدون هزینه مستقیم'}</span>
                             </div>
-                        </div>
-                    </div>
-                    <div class="task-details">
-                        <div class="task-objective">
-                            <h4>هدف از این فعالیت:</h4>
-                            <p>${task.objective}</p>
-                        </div>
-                        <div class="costs-grid">
-                            <div class="cost-card">
-                                <h5>جزئیات هزینه تجهیزات/نرم‌افزار</h5>
-                                <ul>${createCostList(task.equipmentDetails)}</ul>
-                                <p class="total-cost">${formatNumber(task.costs.equipment)} تومان</p>
-                            </div>
-                            <div class="cost-card">
-                                <h5>جزئیات هزینه پیمانکار/اجرا</h5>
-                                <ul>${createCostList(task.contractorDetails)}</ul>
-                                <p class="total-cost">${formatNumber(task.costs.contractor)} تومان</p>
-                            </div>
+                            ${task.risk_analysis ? `<button class="details-btn" data-task-id="${task.id}">مشاهده ریسک‌ها</button>` : ''}
                         </div>
                     </div>
                 </div>`;
         });
-
         mainHtml += `</div>`;
-        phaseCounter++;
-    }
+    });
 
-    mainHtml += `
-        </main>
+    mainHtml += `</main>
         <footer>
             <p>طرح جامع پروژه و ساختار شکست کار (WBS) - اصلاح و توسعه زیرساخت IT فراپخت</p>
             <p>تهیه کننده: هادی علایی، مدیر فناوری اطلاعات</p>
@@ -116,15 +85,52 @@ const generateReport = () => {
 
     appRoot.innerHTML = navHtml + mainHtml;
 
-    // --- Event Listeners ---
+    // --- MODAL LOGIC ---
+    const modal = document.getElementById('details-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalBody = document.getElementById('modal-body');
+    const closeModalBtn = document.getElementById('modal-close-btn');
 
-    // Hamburger Menu
+    const openModal = (task) => {
+        modalTitle.textContent = `تحلیل ریسک: ${task.title}`;
+        modalBody.textContent = task.risk_analysis;
+        modal.classList.add('visible');
+    };
+
+    const closeModal = () => {
+        modal.classList.remove('visible');
+    };
+
+    appRoot.addEventListener('click', (event) => {
+        if (event.target.classList.contains('details-btn')) {
+            const taskId = event.target.dataset.taskId;
+            // Find the task in the nested data structure
+            let foundTask = null;
+            for (const phase of projectData) {
+                foundTask = phase.tasks.find(t => t.id === taskId);
+                if (foundTask) break;
+            }
+            if (foundTask) {
+                openModal(foundTask);
+            }
+        }
+    });
+
+    closeModalBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    // --- HAMBURGER MENU LOGIC ---
     const hamburgerBtn = document.getElementById('hamburger-btn');
     let menuDiv = document.getElementById('hamburger-menu');
     if (menuDiv) menuDiv.remove();
 
     menuDiv = document.createElement('div');
     menuDiv.id = 'hamburger-menu';
+    // ... (rest of the hamburger menu setup is the same, just updating the loop)
     menuDiv.style.position = 'fixed';
     menuDiv.style.top = '70px';
     menuDiv.style.right = '1rem';
@@ -138,39 +144,27 @@ const generateReport = () => {
     menuDiv.style.border = '1px solid #e5e7eb';
 
     let menuHtml = '<ul style="list-style:none;margin:0;padding:0">';
-    let phaseIndex = 1;
-    for (const phase in groupedTasks) {
-        menuHtml += `<li style="margin-bottom:0.5rem;"><a href="#phase-${phaseIndex}" style="text-decoration:none;color:#1f2937;font-weight:600;display:block;padding:0.75rem 1rem;border-radius:0.5rem;transition: all 0.2s ease-in-out;" onmouseover="this.style.background='#f3f4f6'; this.style.color='#1d4ed8';" onmouseout="this.style.background='none'; this.style.color='#1f2937';">${phase}</a></li>`;
-        if(phaseIndex < Object.keys(groupedTasks).length) {
+    projectData.forEach((phase, index) => {
+        const phaseIndex = index + 1;
+        menuHtml += `<li style="margin-bottom:0.5rem;"><a href="#phase-${phaseIndex}" style="text-decoration:none;color:#1f2937;font-weight:600;display:block;padding:0.75rem 1rem;border-radius:0.5rem;transition: all 0.2s ease-in-out;" onmouseover="this.style.background='#f3f4f6'; this.style.color='#1d4ed8';" onmouseout="this.style.background='none'; this.style.color='#1f2937';">${phase.phase_title}</a></li>`;
+        if (phaseIndex < projectData.length) {
             menuHtml += '<hr style="border:none; border-top: 1px solid #f3f4f6; margin: 0.5rem 0;" />';
         }
-        phaseIndex++;
-    }
+    });
     menuHtml += '</ul>';
     menuDiv.innerHTML = menuHtml;
     document.body.appendChild(menuDiv);
 
-    hamburgerBtn.addEventListener('click', function(e) {
+    hamburgerBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         menuDiv.style.display = menuDiv.style.display === 'block' ? 'none' : 'block';
     });
 
-    // Close menu on outside click or link click
-    document.addEventListener('click', function(e) {
-        const isLink = e.target.tagName === 'A' && menuDiv.contains(e.target);
-        if (menuDiv.style.display === 'block' && (!menuDiv.contains(e.target) && e.target !== hamburgerBtn || isLink)) {
+    document.addEventListener('click', (e) => {
+        const isLinkClick = e.target.tagName === 'A' && menuDiv.contains(e.target);
+        const isOutsideClick = menuDiv.style.display === 'block' && !menuDiv.contains(e.target) && e.target !== hamburgerBtn;
+        if (isLinkClick || isOutsideClick) {
             menuDiv.style.display = 'none';
-        }
-    });
-
-    // Collapsible Task Cards
-     appRoot.addEventListener('click', function(event) {
-        const header = event.target.closest('.task-header');
-        if (header) {
-            const details = header.nextElementSibling;
-            if (details && details.classList.contains('task-details')) {
-                 details.style.display = details.style.display === 'block' ? 'none' : 'block';
-            }
         }
     });
 };

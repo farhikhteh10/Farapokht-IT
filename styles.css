@@ -230,6 +230,24 @@ header p {
     color: var(--on-surface-color);
 }
 
+.details-btn {
+    background-color: transparent;
+    border: 1px solid #dadce0;
+    color: var(--primary-color);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-sm);
+    font-family: var(--font-family-base);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+    margin-left: 1rem; /* RTL support */
+}
+
+.details-btn:hover {
+    background-color: var(--primary-color-light);
+    border-color: var(--primary-color);
+}
+
 .task-details {
     display: none;
     border-top: 1px solid #e0e0e0;
@@ -324,4 +342,93 @@ footer {
         margin-left: 0;
         text-align: right;
     }
+}
+
+/* 8. Modal Styles
+-------------------------------------------------- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-speed) ease, visibility 0s var(--transition-speed);
+}
+
+.modal-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+}
+
+.modal-content {
+    background-color: var(--surface-color);
+    padding: 2rem;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-md);
+    max-width: 800px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    transform: scale(0.95);
+    transition: transform var(--transition-speed) ease;
+}
+
+.modal-overlay.visible .modal-content {
+    transform: scale(1);
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--on-surface-variant-color);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+
+.modal-close-btn:hover {
+    background-color: rgba(0,0,0,0.1);
+    color: var(--on-surface-color);
+}
+
+#modal-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-left: 2rem; /* Space for close button */
+}
+
+#modal-body {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--on-surface-variant-color);
+    white-space: pre-wrap; /* Preserve line breaks from the data */
+}
+
+.phase-introduction {
+    font-size: 1.1rem;
+    color: var(--on-surface-variant-color);
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #e0e0e0;
+    line-height: 1.8;
+    text-align: center;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
